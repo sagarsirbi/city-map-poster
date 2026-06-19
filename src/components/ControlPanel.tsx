@@ -35,12 +35,11 @@ interface Props {
 }
 
 const groupedDimensions = DIMENSIONS.reduce<Record<string, Dimension[]>>((groups, dimension) => {
-  const nextGroups = groups;
-  if (!nextGroups[dimension.category]) {
-    nextGroups[dimension.category] = [];
+  if (!groups[dimension.category]) {
+    groups[dimension.category] = [];
   }
-  nextGroups[dimension.category].push(dimension);
-  return nextGroups;
+  groups[dimension.category].push(dimension);
+  return groups;
 }, {});
 
 const DOWNLOAD_FORMATS: Array<{ id: DownloadFormat; label: string }> = [
