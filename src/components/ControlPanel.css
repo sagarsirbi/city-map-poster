@@ -1,0 +1,280 @@
+.control-panel {
+  width: 260px;
+  min-width: 240px;
+  background: #0f172a;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding-bottom: 1rem;
+}
+
+/* ── Section ── */
+.cp-section {
+  padding: 0.875rem 1rem 0.75rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.cp-section--download {
+  margin-top: auto;
+  border-bottom: none;
+}
+
+.cp-section-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 0.6rem;
+}
+
+.cp-hint {
+  font-size: 0.6875rem;
+  color: #475569;
+  margin-top: 0.35rem;
+}
+
+/* ── Style picker ── */
+.style-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.style-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.style-btn:hover {
+  background: #243044;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+.style-btn--active {
+  background: #172033;
+}
+
+.style-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+/* ── Dimension select ── */
+.cp-select {
+  width: 100%;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.8125rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.cp-select:focus {
+  border-color: #4a9eff;
+}
+
+/* ── Zoom ── */
+.zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zoom-btn {
+  width: 28px;
+  height: 28px;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+}
+
+.zoom-btn:hover {
+  background: #334155;
+}
+
+.zoom-track {
+  flex: 1;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.zoom-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+
+/* ── Toggle ── */
+.toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+.toggle-label {
+  flex: 1;
+  font-size: 0.8125rem;
+  color: #cbd5e1;
+}
+
+.toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  background: #334155;
+  border-radius: 9px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.toggle-input:checked ~ .toggle-switch::after {
+  transform: translateX(14px);
+}
+
+.cp-text-input {
+  width: 100%;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.6rem;
+  margin-top: -0.15rem;
+}
+
+.cp-text-input:focus {
+  border-color: #4a9eff;
+}
+
+.cp-text-input::placeholder {
+  color: #475569;
+}
+
+/* ── Download ── */
+.format-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.625rem;
+}
+
+.format-btn {
+  flex: 1;
+  padding: 0.4rem 0.25rem;
+  background: #1e293b;
+  border: 1.5px solid #334155;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.format-btn:hover {
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+.format-btn--active {
+  background: #172033;
+}
+
+.download-btn {
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: opacity 0.15s, transform 0.1s;
+  filter: brightness(1);
+}
+
+.download-btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.download-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.download-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.dl-icon {
+  font-size: 0.875rem;
+}
+
+.dl-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

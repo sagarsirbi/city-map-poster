@@ -1,0 +1,71 @@
+.poster-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.poster {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.poster-map {
+  position: absolute;
+  inset: 0;
+}
+
+/* Override Leaflet tile attribution (hidden in poster) */
+.poster-map .leaflet-control-attribution {
+  display: none;
+}
+
+/* Overlay bar at the bottom of the poster */
+.poster-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  gap: 0.5rem;
+}
+
+.overlay-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.overlay-city {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overlay-country {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.overlay-coords {
+  font-size: 0.625rem;
+  font-family: 'SF Mono', 'Fira Mono', 'Courier New', monospace;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
