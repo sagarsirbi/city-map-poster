@@ -1,6 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent,
+} from 'react';
+import { LoaderCircle, MapPin, Search } from 'lucide-react';
 import type { GeocodingResult } from '../types';
-import './SearchBar.css';
 
 interface Props {
   onGeocode: (result: GeocodingResult) => void;
@@ -29,19 +36,21 @@ export default function SearchBar({ onGeocode }: Props) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const fetchSuggestions = useCallback(async (q: string) => {
-    if (q.trim().length < 2) {
+  const fetchSuggestions = useCallback(async (nextQuery: string) => {
+    if (nextQuery.trim().length < 2) {
       setSuggestions([]);
       setIsOpen(false);
       return;
     }
+
     setIsLoading(true);
+
     try {
-      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&accept-language=en`;
-      const res = await fetch(url, {
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(nextQuery)}&format=json&limit=6&addressdetails=1&accept-language=en`;
+      const response = await fetch(url, {
         headers: { 'Accept-Language': 'en' },
       });
-      const data: Suggestion[] = await res.json();
+      const data: Suggestion[] = await response.json();
       setSuggestions(data);
       setIsOpen(data.length > 0);
     } catch {
@@ -51,60 +60,73 @@ export default function SearchBar({ onGeocode }: Props) {
     }
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setQuery(val);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => fetchSuggestions(val), 350);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setQuery(value);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => fetchSuggestions(value), 350);
   };
 
-  const handleSelect = (s: Suggestion) => {
+  const handleSelect = (suggestion: Suggestion) => {
     const cityName =
-      s.address?.city ||
-      s.address?.town ||
-      s.address?.village ||
-      s.address?.municipality ||
-      s.name;
-    const country = s.address?.country ?? '';
+      suggestion.address?.city ||
+      suggestion.address?.town ||
+      suggestion.address?.village ||
+      suggestion.address?.municipality ||
+      suggestion.name;
+    const country = suggestion.address?.country ?? '';
 
     onGeocode({
-      lat: parseFloat(s.lat),
-      lng: parseFloat(s.lon),
+      lat: parseFloat(suggestion.lat),
+      lng: parseFloat(suggestion.lon),
       cityName,
       country,
-      displayName: s.display_name,
+      displayName: suggestion.display_name,
     });
     setQuery(cityName);
     setIsOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && suggestions.length > 0) {
       handleSelect(suggestions[0]);
     }
-    if (e.key === 'Escape') {
+
+    if (event.key === 'Escape') {
       setIsOpen(false);
     }
   };
 
-  // Close dropdown on outside click
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+    const handleClick = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="search-wrapper" ref={wrapperRef}>
-      <div className="search-input-row">
-        <span className="search-icon">🔍</span>
+    <div className="relative w-full max-w-xl" ref={wrapperRef}>
+      <div className="flex h-10 items-center gap-2 rounded-2xl border border-input bg-background/80 px-3 shadow-sm transition focus-within:ring-2 focus-within:ring-ring">
+        <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
           type="text"
-          className="search-input"
+          className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
           placeholder="Search for a city…"
           value={query}
           onChange={handleChange}
@@ -113,20 +135,27 @@ export default function SearchBar({ onGeocode }: Props) {
           autoComplete="off"
           spellCheck={false}
         />
-        {isLoading && <span className="search-spinner" />}
+        {isLoading && <LoaderCircle className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />}
       </div>
 
       {isOpen && suggestions.length > 0 && (
-        <ul className="search-dropdown" role="listbox">
-          {suggestions.map((s) => (
-            <li
-              key={s.place_id}
-              className="search-option"
-              role="option"
-              onMouseDown={() => handleSelect(s)}
-            >
-              <span className="search-option-icon">📍</span>
-              <span className="search-option-text">{s.display_name}</span>
+        <ul
+          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+          role="listbox"
+        >
+          {suggestions.map((suggestion) => (
+            <li key={suggestion.place_id} role="option">
+              <button
+                type="button"
+                className="flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-accent"
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  handleSelect(suggestion);
+                }}
+              >
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="text-sm leading-5 text-foreground/90">{suggestion.display_name}</span>
+              </button>
             </li>
           ))}
         </ul>
