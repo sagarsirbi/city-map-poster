@@ -85,7 +85,7 @@ export default function App() {
           <div className="hidden min-w-0 sm:block">
             <p className="truncate text-sm font-semibold tracking-tight">City Map Poster</p>
             <p className="truncate text-xs text-muted-foreground">
-              Build clean social-ready map posters with a bento workspace.
+              Build clean social-ready map posters.
             </p>
           </div>
         </div>

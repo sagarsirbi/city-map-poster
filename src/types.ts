@@ -1,5 +1,5 @@
 // Map style options
-export type MapStyle = 'dark' | 'light' | 'classic' | 'modern';
+export type MapStyle = 'dark' | 'light' | 'classic' | 'modern' | 'midnight-blue' | 'terracotta' | 'neon' | 'coral' | 'heatwave';
 
 // Download format options
 export type DownloadFormat = 'png' | 'jpg' | 'webp';
@@ -41,6 +41,9 @@ export interface GeocodingResult {
 export interface StyleConfig {
   id: MapStyle;
   label: string;
+  description: string;
+  /** Four CSS background values rendered as swatch blocks in the theme picker */
+  swatchColors: [string, string, string, string];
   tileUrl: string;
   attribution: string;
   overlayBg: string;

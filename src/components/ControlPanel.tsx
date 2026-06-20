@@ -1,4 +1,4 @@
-import { Download, Minus, Palette, Plus, Ruler, Type } from 'lucide-react';
+import { Download, Minus, Palette, Pencil, Plus, Ruler, Type } from 'lucide-react';
 import { DIMENSIONS, STYLE_CONFIGS } from '../constants';
 import type {
   Dimension,
@@ -96,7 +96,26 @@ export default function ControlPanel({
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-2">
+            {/* Active theme description */}
+            <div className="mb-4 flex items-start justify-between gap-2 rounded-xl border border-border/50 bg-background/40 px-3 py-2.5">
+              <div className="min-w-0">
+                <p className="text-[0.625rem] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                  Theme: {styleConfig.label}
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{styleConfig.description}</p>
+              </div>
+              <button
+                type="button"
+                className="shrink-0 rounded-lg border border-border/60 p-1.5 text-muted-foreground transition hover:bg-accent/50"
+                aria-label="Theme info"
+                tabIndex={-1}
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {/* Theme cards – one per row, 4 colour swatches */}
+            <div className="grid grid-cols-1 gap-2">
               {STYLE_CONFIGS.map((style) => (
                 <button
                   key={style.id}
@@ -105,20 +124,15 @@ export default function ControlPanel({
                   onClick={() => onMapStyleChange(style.id)}
                   style={mapStyle === style.id ? selectedButtonStyle : undefined}
                 >
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <span
-                      className="block h-8 w-8 rounded-xl border border-white/10 shadow-sm"
-                      style={{
-                        background: `linear-gradient(135deg, ${style.posterBg} 0%, ${style.accentColor} 100%)`,
-                      }}
-                    />
-                    <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{ backgroundColor: style.accentColor }}
-                    />
+                  {/* 4 colour swatches */}
+                  <div className="mb-2 flex h-10 gap-0.5 overflow-hidden rounded-lg">
+                    {style.swatchColors.map((color, i) => (
+                      <span key={i} className="flex-1" style={{ background: color }} />
+                    ))}
                   </div>
-                  <div className="text-sm font-medium text-foreground">{style.label}</div>
-                  <p className="mt-1 text-xs text-muted-foreground">Poster finish & overlay tone</p>
+                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-foreground">
+                    {style.label.toUpperCase()}
+                  </p>
                 </button>
               ))}
             </div>

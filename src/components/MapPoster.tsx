@@ -47,6 +47,15 @@ function MapEventHandler({
   return null;
 }
 
+// Forces Leaflet to recalculate tile coverage after the container renders.
+function InvalidateSize() {
+  const map = useMap();
+  useEffect(() => {
+    map.invalidateSize();
+  }, [map]);
+  return null;
+}
+
 const MAX_PREVIEW_HEIGHT = 480;
 const MAX_PREVIEW_WIDTH = 600;
 
@@ -172,6 +181,7 @@ export default function MapPoster({
           />
           <MapController center={mapState.center} zoom={mapState.zoom} />
           <MapEventHandler onMapMove={onMapMove} />
+          <InvalidateSize />
         </MapContainer>
 
         {/* Overlay */}
@@ -181,25 +191,29 @@ export default function MapPoster({
             style={{
               background: styleConfig.overlayBg,
               color: styleConfig.overlayText,
-              borderTop: `2px solid ${styleConfig.accentColor}`,
+              borderTop: `1px solid ${styleConfig.accentColor}55`,
             }}
           >
-            <div className="overlay-left">
-              {overlay.showCityName && (
-                <span className="overlay-city" style={{ color: styleConfig.overlayText }}>
-                  {overlay.cityName}
-                </span>
-              )}
-              {overlay.showCountry && (
-                <span className="overlay-country" style={{ color: styleConfig.accentColor }}>
-                  {overlay.country}
-                </span>
-              )}
-            </div>
+            {overlay.showCityName && (
+              <span className="overlay-city" style={{ color: styleConfig.overlayText }}>
+                {overlay.cityName.toUpperCase()}
+              </span>
+            )}
+            {(overlay.showCityName || overlay.showCountry) && overlay.showCountry && (
+              <div
+                className="overlay-divider"
+                style={{ background: styleConfig.accentColor }}
+              />
+            )}
+            {overlay.showCountry && (
+              <span className="overlay-country" style={{ color: styleConfig.accentColor }}>
+                {overlay.country.toUpperCase()}
+              </span>
+            )}
             {overlay.showCoordinates && (
               <span
                 className="overlay-coords"
-                style={{ color: styleConfig.overlayText, opacity: 0.75 }}
+                style={{ color: styleConfig.overlayText, opacity: 0.7 }}
               >
                 {formatCoords(mapState.center[0], mapState.center[1])}
               </span>

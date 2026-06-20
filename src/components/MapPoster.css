@@ -10,6 +10,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 8px;
+  container-type: inline-size;
 }
 
 .poster-map {
@@ -29,43 +30,51 @@
   left: 0;
   right: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 0.85rem;
+  justify-content: center;
+  padding: 6cqi 4cqi;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   z-index: 1000;
-  gap: 0.5rem;
-}
-
-.overlay-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  min-width: 0;
+  gap: 0;
+  min-height: 22%;
 }
 
 .overlay-city {
-  font-size: 0.9375rem;
+  font-size: clamp(0.65rem, 5cqi, 3rem);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.overlay-divider {
+  width: 30%;
+  height: 1px;
+  opacity: 0.5;
+  margin: 0.8cqi 0 0.7cqi;
+  flex-shrink: 0;
 }
 
 .overlay-country {
-  font-size: 0.6875rem;
+  font-size: clamp(0.45rem, 2cqi, 1rem);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.2em;
+  text-align: center;
   white-space: nowrap;
 }
 
 .overlay-coords {
-  font-size: 0.625rem;
+  font-size: clamp(0.4rem, 1.5cqi, 0.75rem);
   font-family: 'SF Mono', 'Fira Mono', 'Courier New', monospace;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-align: center;
   white-space: nowrap;
-  flex-shrink: 0;
+  margin-top: 0.6cqi;
 }
